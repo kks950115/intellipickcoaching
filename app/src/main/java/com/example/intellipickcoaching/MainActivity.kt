@@ -2,6 +2,7 @@ package com.example.intellipickcoaching
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,12 +17,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
         setContentView(binding.root)
+
+        var dbHelper = DBHelper(this, "mydb.db",null,1)
+        var database = dbHelper.writableDatabase
+
+        val id = binding.etId
+        val pw = binding.etPw
+
         binding.btnLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java )
-            intent.putExtra("id",binding.etId.toString())
-            intent.putExtra("pw",binding.etPw.toString())
-            startActivity(intent)
+            var result = dbHelper.select(database,id.toString(),pw.toString())
+            if(result != null){
+                val intent = Intent(this, LoginActivity::class.java )
+                intent.putExtra("id",binding.etId.toString())
+                intent.putExtra("pw",binding.etPw.toString())
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "아이디나 비밀번호가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+                id.text.clear()
+                pw.text.clear()
+            }
+
         }
+
+
 
         binding.tvJoin.setOnClickListener {
             val intent = Intent(this,SigninActivity::class.java)

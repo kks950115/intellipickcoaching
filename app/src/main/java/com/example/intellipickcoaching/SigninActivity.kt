@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.intellipickcoaching.databinding.ActivitySigninBinding
@@ -21,6 +22,9 @@ class SigninActivity : AppCompatActivity() {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
 //            insets
 //       }
+        var dbHelper = DBHelper(this, "mydb.db",null,1)
+        var database = dbHelper.writableDatabase
+
         val btnJoin = binding.btnJoin
         var namevalidcheck = false
         var idvalidcheck = false
@@ -154,6 +158,8 @@ class SigninActivity : AppCompatActivity() {
         })
 
         btnJoin.setOnClickListener {
+            Toast.makeText(this, "회원가입 완료.", Toast.LENGTH_SHORT).show()
+            dbHelper.insert(database,name.toString(),pw.toString(),name.toString(),phone.toString(),email.toString())
             //db에 입력
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)

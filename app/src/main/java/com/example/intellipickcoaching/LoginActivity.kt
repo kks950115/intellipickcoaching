@@ -17,5 +17,17 @@ class LoginActivity : AppCompatActivity() {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
 //            insets
 //        }
+        val intent = intent
+        val id = intent.getStringExtra("id")
+        val pw = intent.getStringExtra("pw")
+
+
+        var dbHelper = DBHelper(this, "mydb.db",null,1)
+        var database = dbHelper.writableDatabase
+
+        var result = dbHelper.select(database,id.toString(),pw.toString())
+
+
+        binding.textView.text = result.toString()
     }
 }
